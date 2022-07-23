@@ -40,12 +40,12 @@ namespace AspNetCoreUseRedis.Factory
             }
         }
 
-        public IConnectionMultiplexer? GetConnection()
+        public IConnectionMultiplexer GetConnection()
         {
             return connections.FirstOrDefault(u => u.ConnectionMultiplexer.IsConnected)?.ConnectionMultiplexer;
         }
 
-        public IConnectionMultiplexer? GetConnection(string name)
+        public IConnectionMultiplexer GetConnection(string name)
         {
             var connection = connections.FirstOrDefault(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase))?.ConnectionMultiplexer;
 

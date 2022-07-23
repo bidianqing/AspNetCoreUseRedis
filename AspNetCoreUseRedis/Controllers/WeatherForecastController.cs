@@ -17,7 +17,7 @@ namespace AspNetCoreUseRedis.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IDistributedCache _cache;
         private readonly IDatabase _redis;
-        private readonly IConnectionMultiplexer? _connection;
+        private readonly IConnectionMultiplexer _connection;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger,
             IDistributedCache cache,
@@ -40,7 +40,7 @@ namespace AspNetCoreUseRedis.Controllers
             //    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
             //});
 
-            _connection?.GetDatabase().StringSet("name", "tom", TimeSpan.FromSeconds(20));
+            _connection.GetDatabase().StringSet("name", "tom", TimeSpan.FromSeconds(20));
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
