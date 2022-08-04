@@ -10,13 +10,15 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.ConnectionMultiplexerFactory = async () =>
     {
-        return await ConnectionMultiplexer.ConnectAsync("localhost:6379");
+        var configuration = builder.Configuration.GetConnectionString("redis");
+        return await ConnectionMultiplexer.ConnectAsync(configuration);
     };
 });
 
 builder.Services.AddSingleton(sp =>
 {
-    return ConnectionMultiplexer.Connect("localhost:6379");
+    var configuration = builder.Configuration.GetConnectionString("redis");
+    return ConnectionMultiplexer.Connect(configuration);
 });
 
 builder.Services.AddRedisFactory(options =>

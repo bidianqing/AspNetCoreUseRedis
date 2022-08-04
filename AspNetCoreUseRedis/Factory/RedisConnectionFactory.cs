@@ -5,8 +5,7 @@ namespace AspNetCoreUseRedis.Factory
 {
     public class RedisConnectionFactory
     {
-        private IEnumerable<ConnectionMultiplexerWrapper> connections;
-        private readonly FactoryOptions factoryOptions;
+        private readonly IEnumerable<ConnectionMultiplexerWrapper> connections;
         private readonly ILogger<RedisConnectionFactory> _logger;
 
         public RedisConnectionFactory(IOptionsMonitor<FactoryOptions> optionsAccessor, 
@@ -19,7 +18,7 @@ namespace AspNetCoreUseRedis.Factory
                 throw new ArgumentNullException(nameof(optionsAccessor));
             }
 
-            factoryOptions = optionsAccessor.CurrentValue;
+            var factoryOptions = optionsAccessor.CurrentValue;
 
             connections = factoryOptions.ConnectionMultiplexerWrappers;
             foreach (var item in connections)

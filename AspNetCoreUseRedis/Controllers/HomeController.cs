@@ -7,19 +7,19 @@ namespace AspNetCoreUseRedis.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class HomeController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<HomeController> _logger;
         private readonly IDistributedCache _cache;
         private readonly IDatabase _redis;
         private readonly IConnectionMultiplexer _connection;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+        public HomeController(ILogger<HomeController> logger,
             IDistributedCache cache,
             ConnectionMultiplexer connectionMultiplexer,
             RedisConnectionFactory redisConnectionFactory)
