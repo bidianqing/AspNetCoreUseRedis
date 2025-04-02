@@ -1,7 +1,7 @@
-using AspNetCoreUseRedis.Factory;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
+using System.Threading.Tasks;
 
 namespace AspNetCoreUseRedis.Controllers
 {
@@ -21,17 +21,16 @@ namespace AspNetCoreUseRedis.Controllers
 
         public HomeController(ILogger<HomeController> logger,
             IDistributedCache cache,
-            ConnectionMultiplexer connectionMultiplexer,
-            RedisConnectionFactory redisConnectionFactory)
+            ConnectionMultiplexer connectionMultiplexer)
         {
             _logger = logger;
             _cache = cache;
             _redis = connectionMultiplexer.GetDatabase();
-            _connection = redisConnectionFactory.GetConnection();
+            _connection = connectionMultiplexer;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IEnumerable<WeatherForecast>> Get()
         {
             //_redis.StringSet("name", "tom", TimeSpan.FromSeconds(20));
 
@@ -41,6 +40,7 @@ namespace AspNetCoreUseRedis.Controllers
             //});
 
             _connection.GetDatabase().StringSet("name", "tom", TimeSpan.FromSeconds(20));
+            long l = await _connection.GetDatabase().PublishAsync(RedisChannel.Literal("messages"), "hello");
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

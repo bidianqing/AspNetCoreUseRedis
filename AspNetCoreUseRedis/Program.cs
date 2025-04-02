@@ -1,4 +1,4 @@
-using AspNetCoreUseRedis.Factory;
+using AspNetCoreUseRedis;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,29 +10,24 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.ConnectionMultiplexerFactory = async () =>
     {
-        var configuration = builder.Configuration.GetConnectionString("redis");
+        var configuration = builder.Configuration.GetConnectionString("Redis");
         return await ConnectionMultiplexer.ConnectAsync(configuration);
     };
 });
 
 builder.Services.AddSingleton(sp =>
 {
-    var configuration = builder.Configuration.GetConnectionString("redis");
-    return ConnectionMultiplexer.Connect(configuration);
+    var configuration = builder.Configuration.GetConnectionString("Redis");
+    ConnectionMultiplexer connection = ConnectionMultiplexer.Connect(configuration);
+
+    return connection;
 });
 
-builder.Services.AddRedisFactory(options =>
-{
-    var wrappers = builder.Configuration.GetSection("RedisConnections").Get<ConnectionMultiplexerWrapper[]>();
-    options.ConnectionMultiplexerWrappers = wrappers;
-});
+builder.Services.AddHostedService<ReceiveRedisMessageBackgroudService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
