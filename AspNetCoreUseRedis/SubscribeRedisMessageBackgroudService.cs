@@ -12,19 +12,24 @@ namespace AspNetCoreUseRedis
             _logger = logger;
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
+        public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            _connectionMultiplexer.GetSubscriber().Subscribe(RedisChannel.Literal("messages"), (channel, message) =>
+            await _connectionMultiplexer.GetSubscriber().SubscribeAsync(RedisChannel.Literal("messages"), (channel, message) =>
             {
                 _logger.LogInformation($"Received message: {message}");
             });
 
-            return base.StartAsync(cancellationToken);
+            await base.StartAsync(cancellationToken);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await Task.CompletedTask;
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogInformation(DateTime.Now.ToString());
+
+                await Task.Delay(3000, stoppingToken);
+            }
         }
     }
 }
