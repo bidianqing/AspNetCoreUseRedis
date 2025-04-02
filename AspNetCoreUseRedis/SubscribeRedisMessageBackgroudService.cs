@@ -2,11 +2,11 @@
 
 namespace AspNetCoreUseRedis
 {
-    public class ReceiveRedisMessageBackgroudService : BackgroundService
+    public class SubscribeRedisMessageBackgroudService : BackgroundService
     {
         private readonly ConnectionMultiplexer _connectionMultiplexer;
-        private readonly ILogger<ReceiveRedisMessageBackgroudService> _logger;
-        public ReceiveRedisMessageBackgroudService(ConnectionMultiplexer connectionMultiplexer, ILogger<ReceiveRedisMessageBackgroudService> logger)
+        private readonly ILogger<SubscribeRedisMessageBackgroudService> _logger;
+        public SubscribeRedisMessageBackgroudService(ConnectionMultiplexer connectionMultiplexer, ILogger<SubscribeRedisMessageBackgroudService> logger)
         {
             _connectionMultiplexer = connectionMultiplexer;
             _logger = logger;

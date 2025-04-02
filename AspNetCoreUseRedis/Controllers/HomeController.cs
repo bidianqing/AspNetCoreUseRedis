@@ -42,6 +42,8 @@ namespace AspNetCoreUseRedis.Controllers
             _connection.GetDatabase().StringSet("name", "tom", TimeSpan.FromSeconds(20));
             long l = await _connection.GetDatabase().PublishAsync(RedisChannel.Literal("messages"), "hello");
 
+            await _connection.GetDatabase().ListLeftPushAsync("list", "list_value");
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),

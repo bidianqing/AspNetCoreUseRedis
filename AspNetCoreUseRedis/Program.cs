@@ -23,7 +23,8 @@ builder.Services.AddSingleton(sp =>
     return connection;
 });
 
-builder.Services.AddHostedService<ReceiveRedisMessageBackgroudService>();
+builder.Services.AddHostedService<SubscribeRedisMessageBackgroudService>();
+builder.Services.AddHostedService<PopRedisMessageBackgroudService>();
 
 var app = builder.Build();
 
