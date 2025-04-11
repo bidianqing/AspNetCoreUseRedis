@@ -15,18 +15,17 @@ namespace AspNetCoreUseRedis.Controllers
         };
 
         private readonly ILogger<HomeController> _logger;
-        private readonly IDistributedCache _cache;
         private readonly IDatabase _redis;
         private readonly IConnectionMultiplexer _connection;
+        private readonly IEnumerable<IHostedService> _hostedServices;
 
         public HomeController(ILogger<HomeController> logger,
-            IDistributedCache cache,
-            ConnectionMultiplexer connectionMultiplexer)
+            ConnectionMultiplexer connectionMultiplexer, IEnumerable<IHostedService> hostedServices)
         {
             _logger = logger;
-            _cache = cache;
             _redis = connectionMultiplexer.GetDatabase();
             _connection = connectionMultiplexer;
+            _hostedServices = hostedServices;
         }
 
         [HttpGet]
@@ -39,7 +38,6 @@ namespace AspNetCoreUseRedis.Controllers
             //    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
             //});
 
-            _connection.GetDatabase().StringSet("name", "tom", TimeSpan.FromSeconds(20));
             long l = await _connection.GetDatabase().PublishAsync(RedisChannel.Literal("messages"), "hello");
 
             await _connection.GetDatabase().ListLeftPushAsync("list", "list_value");
