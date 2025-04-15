@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSingleton(sp =>
 {
     var configuration = builder.Configuration.GetConnectionString("Redis");
